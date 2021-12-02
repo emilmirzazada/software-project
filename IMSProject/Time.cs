@@ -10,7 +10,7 @@ namespace IMSProject
         public static String add(String time, int minutes)
         {
             DateTime calendar = DateTime.Parse(time);
-            calendar.AddMinutes(minutes);
+            calendar = calendar.AddMinutes(minutes);
 
             return calendar.ToString();
         }

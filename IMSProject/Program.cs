@@ -136,7 +136,14 @@ namespace IMSProject
                     }
                     else if (column != 0 && row == 0)
                     {
-                        time_table[0,column] = cities[column - 1].ToUpper();
+                        if (column == 1)
+                        {
+                            time_table[0,column] = cities[column - 1].ToUpper();
+                        }
+                        else
+                        {
+                            time_table[0,column] = cities[column - 1].ToUpper() + " to " + cities[0].ToUpper();
+                        }
                     }
                     else if (column == 0)
                     {
@@ -154,12 +161,24 @@ namespace IMSProject
                             AREA = 2;
                         }
 
-                        time_table[row,column] = "Area: "
-                                + AREA
-                                + ", Time: "
-                                + arrivingHours[row - 1,column - 1]
-                                + ", Week Day: "
-                                + weekDays[row - 1,column - 1];
+                        if (column == 1)
+                        {
+                            time_table[row,column] = "Area: "
+                                    + AREA
+                                    + ", Flight time from Baku: "
+                                    + arrivingHours[row - 1,column - 1]
+                                    + ", Week Day: "
+                                    + weekDays[row - 1,column - 1];
+                        }
+                        else
+                        {
+                            time_table[row,column] = "Area: "
+                                    + AREA
+                                    + ", Arriving time to Baku: "
+                                    + arrivingHours[row - 1,column - 1]
+                                    + ", Week Day: "
+                                    + weekDays[row - 1,column - 1];
+                        }
 
                     }
                 }
@@ -167,12 +186,20 @@ namespace IMSProject
 
 
             String[] headers = new String[time_table.GetLength(0)];
-            Array.Copy(time_table, 0, headers, 0, time_table.GetLength(0));
 
-            String[,] data = new String[time_table.Length - 1, time_table.GetLength(0)];
-            for (int i = 1; i < time_table.Length; i++)
+            for (int i = 0; i < time_table.GetLength(0); i++)
             {
-                Array.Copy(time_table[i], 0, data[i - 1], 0, time_table.GetLength(0));
+                headers[i] = time_table[0, i];
+            }
+
+            String[,] data = new String[time_table.GetLength(0)-1, time_table.GetLength(0)];
+            for (int i = 1,x=0; i < time_table.GetLength(0); i++)
+            {
+                for (int j = 0; j < time_table.GetLength(1); j++)
+                {
+                    data[x, j] = time_table[i, j];
+                }
+                x++;
             }
 
             Console.WriteLine(FlipTable.of(headers, data));

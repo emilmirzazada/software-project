@@ -30,13 +30,19 @@ namespace IMSProject
             this.headers = headers;
             this.data = data;
 
+            string[] test = new string[data.GetLength(1)];
+
             columns = headers.Length;
             columnWidths = new int[columns];
             for (int row = -1; row < data.Length; row++)
             {
-                String[] rowData = (row == -1) ? headers : Enumerable.Range(0, data.GetLength(1))
-                .Select(x => data[row,x])
-                .ToArray(); // Hack to parse headers too.
+
+                for (int i = 0; i < data.GetLength(1); i++)
+                {
+                    test[i] = data[0, i];
+                }
+
+                String[] rowData = (row == -1) ? headers : test; // Hack to parse headers too.
 
                 if (rowData.Length != columns)
                 {
@@ -79,12 +85,16 @@ namespace IMSProject
             }
             else
             {
+                string[] test2 = new string[data.GetLength(1)];
                 for (int row = 0; row < data.Length; row++)
                 {
+                    for (int i = 0; i < data.GetLength(1); i++)
+                    {
+                        test2[i] = data[0, i];
+                    }
+
                     printDivider(builder, row == 0 ? "╠═╪═╣" : "╟─┼─╢");
-                    printData(builder, Enumerable.Range(0, data.GetLength(1))
-                .Select(x => data[row,x])
-                .ToArray());
+                    printData(builder, test2);
 
                 }
                 printDivider(builder, "╚═╧═╝");
@@ -112,7 +122,8 @@ namespace IMSProject
                     String[] cellLines = data[column].Split("\\n");
                     lines = Math.Max(lines, cellLines.Length);
                     String cellLine = line < cellLines.Length ? cellLines[line] : "";
-                    outt.Append(pad(columnWidths[column], cellLine));
+                    /*outt.Append(pad(columnWidths[column], cellLine));*/
+                    outt.Append(cellLine);
                 }
                 outt.Append("║\n");
             }
